@@ -140,9 +140,10 @@ def all_lists():
 @app.route('/list/<ident>',methods=["GET","POST"])
 def one_list(ident):
     form = UpdateButtonForm()
+    formdel = DeleteButtonForm()
     lst = TodoList.query.filter_by(id=ident).first()
     items = lst.items.all()
-    return render_template('list_tpl.html',todolist=lst,items=items,form=form)
+    return render_template('list_tpl.html',todolist=lst,items=items,form=form, formdel=formdel)
 # TODO 364: Update the one_list view function and the list_tpl.html view file so that there is an Update button next to each todolist item, and the priority integer of that item can be updated. (This is also addressed in later TODOs.)
 # HINT: These template updates are minimal, but that small update(s) make(s) a big change in what you can do in the app! Check out the examples from previous classes for help.
 
@@ -178,6 +179,13 @@ def delete(lst):
     # Should flash a message about what was deleted, e.g. Deleted list <title of list>
     # And should redirect the user to the page showing all the todo lists
     # HINT: Compare against what you've done for updating and class notes -- the goal here is very similar, and in some ways simpler.
+
+@app.route('/delete_item/<item>', methods=["GET", "POST"])
+def delete_item(item):
+    i = TodoItem.query.filter_by(description = item).first()
+    db.session.delete(i)
+    flash("Successfully deleted {}".format(item))
+    return redirect(url_for('all_lists'))
 
 if __name__ == "__main__":
     db.create_all()

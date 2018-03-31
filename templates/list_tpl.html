@@ -15,6 +15,10 @@
            {{ form.hidden_tag() }}
            {{ form.submit() }}
         </form>
+        <form method="POST" action="/delete_item/{{ item.description }}">
+          {{ formdel.hidden_tag() }}
+          {{ formdel.submit() }}
+        </form>
     </li>
 {% endfor %}
 </ul>
